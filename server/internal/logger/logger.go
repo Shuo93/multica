@@ -9,6 +9,7 @@ import (
 
 	chimw "github.com/go-chi/chi/v5/middleware"
 	"github.com/lmittmann/tint"
+	"golang.org/x/term"
 
 	"github.com/multica-ai/multica/server/internal/middleware"
 )
@@ -17,11 +18,7 @@ import (
 // terminal. Used to suppress ANSI color escapes when stderr is redirected
 // to a file (e.g. daemon.log), so log files stay clean.
 func isTerminal(f *os.File) bool {
-	fi, err := f.Stat()
-	if err != nil {
-		return false
-	}
-	return fi.Mode()&os.ModeCharDevice != 0
+	return term.IsTerminal(int(f.Fd()))
 }
 
 // Init initializes the global slog logger. Colors are enabled when stderr
