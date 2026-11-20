@@ -1,0 +1,4 @@
+{"agentInfo":{"name":"JiuwenSwarm","version":"0.2.9b5"},"agentCapabilities":{"loadSession":false,"mcpCapabilities":{"http":false,"sse":false}},"protocolVersion":1}
+{"jsonrpc":"2.0","method":"session/update","params":{"sessionId":"swarm-test","update":{"sessionUpdate":"tool_call","toolCallId":"poc-edit","kind":"edit","title":"Editing acp-poc-marker.txt","rawInput":{"file_path":"acp-poc-marker.txt","content":"POC_FILE_OK\n"},"status":"pending"}}}
+{"jsonrpc":"2.0","method":"session/update","params":{"sessionId":"swarm-test","update":{"sessionUpdate":"tool_call_update","toolCallId":"poc-edit","status":"completed","content":[{"type":"content","content":{"type":"text","text":"POC_FILE_OK"}}]}}}
+{"stopReason":"cancelled"}

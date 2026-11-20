@@ -35,6 +35,7 @@ Multica currently detects these commands:
 | Kimi CLI | `kimi` | [Kimi CLI](https://github.com/MoonshotAI/kimi-cli) |
 | Kiro CLI | `kiro-cli` | [Install Kiro CLI](https://kiro.dev/docs/cli/installation/) |
 | MiniMax Code | `mcode` | [Install MiniMax Code CLI](https://www.npmjs.com/package/@minimax-ai/code) |
+| JiuwenSwarm | `jiuwenswarm-acp` | [Install and configure JiuwenSwarm](#jiuwenswarm) |
 | Muse Code | `muse` | [Install Muse Code](https://dev.meta.ai/docs/muse-code) |
 | ZCode | `zcode` / ZCode Desktop | [ZCode](https://zcode.z.ai/) |
 | OpenClaw | `openclaw` | [Install OpenClaw](https://docs.openclaw.ai/install) |
@@ -148,6 +149,12 @@ Devin runs locally through `devin acp`, not cloud Devin VMs. Run `devin auth log
 Install a supported Node.js release (`>=22.19 <23` or `>=24 <27`) and run `npm install --global @minimax-ai/code@latest`. A global npm install places `mcode` on npm's global binary path; if `command -v mcode` or `Get-Command mcode` cannot find it, add that path to `PATH`. Then run `mcode login`. MiniMax Code owns the model selection; Multica cannot override it through ACP.
 
 </Accordion>
+<Accordion title="JiuwenSwarm" id="jiuwenswarm">
+
+Install JiuwenSwarm with ACP support and confirm that `jiuwenswarm-acp --version` prints a version. Start the JiuwenSwarm Gateway and set `GATEWAY_URL` in the daemon environment. Put `jiuwenswarm-acp` on `PATH` or set `MULTICA_JIUWENSWARM_PATH` to its executable path.
+
+</Accordion>
+
 <Accordion title="Muse Code" id="muse-code">
 
 Muse Code requires 1.4.10 or later. Follow the [official installation and sign-in guide](https://dev.meta.ai/docs/muse-code), then confirm `muse` is on `PATH`. Multica discovers its models over MSP and supports continuing sessions.

@@ -254,6 +254,14 @@ func ListModels(ctx context.Context, providerType string, runtimeCmd Command) (C
 		return cachedDiscovery(discoveryCacheKey(providerType, runtimeCmd), func() (Catalog, error) {
 			return discovered(discoverHermesModels(ctx, runtimeCmd))
 		})
+	case "jiuwenswarm":
+		return cachedDiscovery(discoveryCacheKey(providerType, runtimeCmd), func() (Catalog, error) {
+			return discovered(discoverACPModels(ctx, runtimeCmd, acpDiscoveryProvider{
+				defaultBin: "jiuwenswarm-acp", tmpdirPrefix: "multica-jiuwenswarm-discovery-",
+				standaloneACP: true, annotate: annotateACPThinkingForSessionModel,
+				probeModelEffort: true,
+			}))
+		})
 	case "kimi":
 		return cachedDiscovery(discoveryCacheKey(providerType, runtimeCmd), func() (Catalog, error) {
 			return discovered(discoverKimiModels(ctx, runtimeCmd))
@@ -2083,7 +2091,8 @@ type acpDiscoveryProvider struct {
 	isolatedStateEnv string
 	// acpArgs is the argv passed to the binary to start it in ACP
 	// server mode. Defaults to []string{"acp"} when nil/empty.
-	acpArgs []string
+	acpArgs       []string
+	standaloneACP bool // the executable starts directly in ACP mode
 	// selectAuthMethod inspects the initialize response and child environment
 	// after initialize succeeds. An empty method id skips authentication; an
 	// error aborts discovery before any session operation.
@@ -2162,7 +2171,7 @@ func discoverACPModels(ctx context.Context, runtimeCmd Command, p acpDiscoveryPr
 	}
 
 	cmdArgs := p.acpArgs
-	if len(cmdArgs) == 0 {
+	if len(cmdArgs) == 0 && !p.standaloneACP {
 		cmdArgs = []string{"acp"}
 	}
 	cmd := runtimeCmd.exec(runCtx, cmdArgs...)

@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { Monitor } from "@multica/ui/icons";
+import jiuwenSwarmLogo from "./jiuwenswarm-logo.svg";
 import codeartsLogo from "./codearts-logo.svg";
 import qwenLogo from "./qwen-logo.svg";
 import reasonixLogo from "./reasonix-logo.svg";
@@ -98,6 +99,7 @@ function DevecoLogo({ className }: { className: string }) {
 
 // CodeArts — official product icon supplied from the Huawei Cloud CodeArts
 // documentation site favicon.
+const jiuwenSwarmLogoSrc = staticAssetSrc(jiuwenSwarmLogo);
 const codeartsLogoSrc = staticAssetSrc(codeartsLogo);
 
 function CodeArtsLogo({ className }: { className: string }) {
@@ -454,6 +456,8 @@ export function ProviderLogo({
       return <CopilotLogo className={className} />;
     case "cursor":
       return <CursorLogo className={className} />;
+    case "jiuwenswarm":
+      return <img src={jiuwenSwarmLogoSrc} alt="" aria-hidden className={className} />;
     case "kimi":
       return <KimiLogo className={className} />;
     case "reasonix":

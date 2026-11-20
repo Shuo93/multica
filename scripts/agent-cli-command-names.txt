@@ -13,6 +13,7 @@ dsh
 grok
 hermes
 kimi
+jiuwenswarm-acp
 kiro-cli
 mcode
 muse

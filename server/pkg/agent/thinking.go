@@ -1028,6 +1028,7 @@ var thinkingDynamicCatalogProviders = map[string]bool{
 //     value. This list is where that offline verification is recorded; the
 //     read-back is runtime diagnostics on top of it.
 var acpCatalogThinkingProviders = map[string]bool{
+	"jiuwenswarm": true,
 	// reasonix v1.21.5: session/new advertises option id `effort` (category
 	// `thought_level`), set_config_option returns the refreshed options, and
 	// the effort reaches the session controller rather than stopping at the

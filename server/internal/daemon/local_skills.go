@@ -183,6 +183,8 @@ func localSkillRootsForProvider(provider string) ([]localSkillRoot, bool, error)
 			providerRoot = filepath.Join(home, ".cursor", "skills")
 		case "hermes":
 			providerRoot = hermesLocalSkillsRoot()
+		case "jiuwenswarm":
+			providerRoot = filepath.Join(home, ".jiuwenswarm", "agent", "workspace", "skills")
 		case "kimi":
 			providerRoot = filepath.Join(home, ".kimi", "skills")
 		case "reasonix":

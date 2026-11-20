@@ -6903,18 +6903,19 @@ func taskRootDirParams(workspacesRoot string, task Task) execenv.RootDirParams {
 // this map at init so their display names stay in lockstep with the
 // descriptor.
 var runtimeDisplayNameOverrides = map[string]string{
-	"codearts":   "CodeArts",
-	"dsh":        "DeepSeek Harness",
-	"traecli":    "Trae",
-	"grok":       "Grok",
-	"qoderclicn": "Qoder CN",
-	"qwen":       "Qwen Code",
-	"qwenpaw":    "QwenPaw",
-	"mcode":      "MiniMax Code",
-	"muse":       "Muse Code",
-	"museapp":    "Muse app",
-	"zcode":      "ZCode",
-	"zeroclaw":   "ZeroClaw",
+	"codearts":    "CodeArts",
+	"dsh":         "DeepSeek Harness",
+	"traecli":     "Trae",
+	"grok":        "Grok",
+	"qoderclicn":  "Qoder CN",
+	"qwen":        "Qwen Code",
+	"qwenpaw":     "QwenPaw",
+	"mcode":       "MiniMax Code",
+	"muse":        "Muse Code",
+	"jiuwenswarm": "JiuwenSwarm",
+	"museapp":     "Muse app",
+	"zcode":       "ZCode",
+	"zeroclaw":    "ZeroClaw",
 }
 
 func init() {
@@ -6965,7 +6966,7 @@ func providerDisplayName(name string) string {
 // was run for 1.5.2.
 func providerNeedsInlineSystemPrompt(provider string) bool {
 	switch provider {
-	case "openclaw", "kimi", "traecli", "qwenpaw":
+	case "openclaw", "kimi", "traecli", "qwenpaw", "jiuwenswarm":
 		return true
 	default:
 		return false

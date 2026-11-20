@@ -433,6 +433,7 @@ var SupportedTypes = []string{
 	"pi",
 	"cursor",
 	"kimi",
+	"jiuwenswarm",
 	"reasonix",
 	"dsh",
 	"kiro",
@@ -535,6 +536,8 @@ func New(agentType string, cfg Config) (Backend, error) {
 		return &cursorBackend{cfg: cfg}, nil
 	case "kimi":
 		return &kimiBackend{cfg: cfg}, nil
+	case "jiuwenswarm":
+		return &jiuwenSwarmBackend{cfg: cfg}, nil
 	case "reasonix":
 		return &reasonixBackend{cfg: cfg}, nil
 	case "dsh":
@@ -603,6 +606,7 @@ var launchHeaders = map[string]string{
 	"deveco":      "deveco run (json)",
 	"hermes":      "hermes acp",
 	"kimi":        "kimi acp",
+	"jiuwenswarm": "jiuwenswarm-acp",
 	"reasonix":    "reasonix acp",
 	"dsh":         "dsh --profile multica (stdio)",
 	"kiro":        "kiro-cli acp",

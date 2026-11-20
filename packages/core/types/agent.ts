@@ -124,6 +124,7 @@ export const RUNTIME_PROFILE_PROTOCOL_FAMILIES = [
   "pi",
   "cursor",
   "kimi",
+  "jiuwenswarm",
   "reasonix",
   "dsh",
   "dim",

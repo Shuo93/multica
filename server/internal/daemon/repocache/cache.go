@@ -82,6 +82,7 @@ var agentGitExcludePatterns = []string{
 	".pi",
 	".omp",
 	".zcode",
+	".agents/skills",
 }
 
 const repoCacheGitTimeout = 10 * time.Minute

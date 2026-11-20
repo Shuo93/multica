@@ -35,6 +35,7 @@ Multica 当前会检测以下命令：
 | Kimi CLI | `kimi` | [Kimi CLI](https://github.com/MoonshotAI/kimi-cli) |
 | Kiro CLI | `kiro-cli` | [安装 Kiro CLI](https://kiro.dev/docs/cli/installation/) |
 | MiniMax Code | `mcode` | [安装 MiniMax Code CLI](https://www.npmjs.com/package/@minimax-ai/code) |
+| JiuwenSwarm | `jiuwenswarm-acp` | [安装和配置 JiuwenSwarm](#jiuwenswarm) |
 | Muse Code | `muse` | [安装 Muse Code](https://dev.meta.ai/docs/muse-code) |
 | ZCode | `zcode` / ZCode Desktop | [ZCode](https://zcode.z.ai/) |
 | OpenClaw | `openclaw` | [安装 OpenClaw](https://docs.openclaw.ai/install) |
@@ -143,6 +144,12 @@ Multica 使用 `amp --execute --stream-json --executor local`，通过标准输�
 安装受支持的 Node.js 版本（`>=22.19 <23` 或 `>=24 <27`），并运行 `npm install --global @minimax-ai/code@latest`。全局 npm 安装会把 `mcode` 放进 npm 的全局可执行目录；`command -v mcode` 或 `Get-Command mcode` 找不到它时，把该目录加入 `PATH`。然后运行 `mcode login`。模型由 MiniMax Code 管理，Multica 无法通过 ACP 覆盖。
 
 </Accordion>
+<Accordion title="JiuwenSwarm" id="jiuwenswarm">
+
+安装支持 ACP 的 JiuwenSwarm，并确认 `jiuwenswarm-acp --version` 能输出版本号。启动 JiuwenSwarm Gateway，在 daemon 的环境中设置 `GATEWAY_URL`。将 `jiuwenswarm-acp` 加入 `PATH`，或通过 `MULTICA_JIUWENSWARM_PATH` 指定可执行文件路径。
+
+</Accordion>
+
 <Accordion title="Muse Code" id="muse-code">
 
 Muse Code 需要 1.4.10 或更高版本。按[官方安装和登录指南](https://dev.meta.ai/docs/muse-code)操作，并确认 `muse` 已加入 `PATH`。Multica 通过 MSP 获取模型列表，支持继续已有会话。

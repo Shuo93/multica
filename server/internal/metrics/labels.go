@@ -161,6 +161,7 @@ var (
 		"hermes":        "hermes",
 		"kiro":          "kiro",
 		"kimi":          "kimi",
+		"jiuwenswarm":   "jiuwenswarm",
 		"reasonix":      "reasonix",
 		"dim":           "dim",
 		"devin":         "devin",

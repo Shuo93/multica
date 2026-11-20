@@ -49,6 +49,7 @@ const PROVIDER_DISPLAY_NAMES: Record<string, string> = {
   qwen: "Qwen Code",
   qwenpaw: "QwenPaw",
   mcode: "MiniMax Code",
+  jiuwenswarm: "JiuwenSwarm",
   muse: "Muse Code",
   museapp: "Muse app",
   omp: "Oh-My-Pi",

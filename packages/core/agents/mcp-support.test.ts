@@ -5,6 +5,7 @@ import { providerSupportsMcpConfig } from "./mcp-support";
 describe("providerSupportsMcpConfig", () => {
   it("accepts a provider whose runtime consumes mcp_config", () => {
     expect(providerSupportsMcpConfig("claude")).toBe(true);
+    expect(providerSupportsMcpConfig("jiuwenswarm")).toBe(true);
     expect(providerSupportsMcpConfig("devin")).toBe(true);
     expect(providerSupportsMcpConfig("zcode")).toBe(true);
   });

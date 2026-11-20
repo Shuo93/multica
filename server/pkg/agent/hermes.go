@@ -1296,6 +1296,15 @@ func (c *hermesClient) writeLine(data []byte) error {
 	return err
 }
 
+// notify writes a JSON-RPC notification (no id, no response).
+func (c *hermesClient) notify(method string, params any) error {
+	data, err := json.Marshal(map[string]any{"jsonrpc": "2.0", "method": method, "params": params})
+	if err != nil {
+		return err
+	}
+	return c.writeLine(append(data, '\n'))
+}
+
 func (c *hermesClient) request(ctx context.Context, method string, params any) (json.RawMessage, error) {
 	return c.requestAndNotifySent(ctx, method, params, nil)
 }
