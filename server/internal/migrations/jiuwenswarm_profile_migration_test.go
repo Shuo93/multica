@@ -51,11 +51,11 @@ func TestJiuwenSwarmRuntimeProfileMigration(t *testing.T) {
 	}
 	apply("656_runtime_profile_add_amp.up")
 	insert("jiuwenswarm", false)
-	apply("710_runtime_profile_add_jiuwenswarm.up")
+	apply("711_runtime_profile_add_jiuwenswarm.up")
 	insert("jiuwenswarm", true)
 	insert("amp", true)
 	insert("unknown", false)
-	apply("710_runtime_profile_add_jiuwenswarm.down")
+	apply("711_runtime_profile_add_jiuwenswarm.down")
 	insert("jiuwenswarm", false)
 	insert("amp", true)
 	var count int
