@@ -18,6 +18,8 @@ func TestJiuwenSwarmACP(t *testing.T) {
 	}{
 		{"PoC playback", "poc", "completed"},
 		{"negotiated capabilities", "capable", "completed"},
+		{"persistent session load", "load", "completed"},
+		{"expired session", "expired", "failed"},
 		{"gateway unreachable", "offline", "failed"},
 		{"cancel", "cancel", "aborted"},
 	}
@@ -79,6 +81,18 @@ func TestJiuwenSwarmACP(t *testing.T) {
 				if res.SessionID != "swarm-test" {
 					t.Fatalf("session id = %q", res.SessionID)
 				}
+			case "load":
+				want = []string{"session/load", "session/set_model", "session/prompt"}
+				absent = []string{"session/new", "session/set_config_option"}
+				if res.SessionID != "swarm-test" {
+					t.Fatalf("session id = %q", res.SessionID)
+				}
+			case "expired":
+				want = []string{"session/load"}
+				absent = []string{"session/new", "session/prompt"}
+				if !res.ResumeRejected || res.SessionID != "" {
+					t.Fatalf("expected daemon fallback signal, got %+v", res)
+				}
 			case "offline":
 				if !strings.Contains(res.Error, "JiuwenSwarm Gateway unreachable") {
 					t.Fatalf("gateway diagnostic missing: %+v", res)
@@ -113,6 +127,21 @@ func TestJiuwenSwarmResumeMethod(t *testing.T) {
 	}
 }
 
+func TestJiuwenSwarmModelDiscovery(t *testing.T) {
+	dir := t.TempDir()
+	binary := filepath.Join(dir, jiuwenSwarmBinary)
+	writeTestExecutable(t, binary, []byte(jiuwenSwarmTestScript))
+	t.Setenv("SWARM_MODE", "load")
+	t.Setenv("SWARM_REQUESTS", filepath.Join(dir, "requests"))
+	catalog, err := ListModels(context.Background(), "jiuwenswarm", Command{Path: binary})
+	if err != nil || !catalog.Verified() || len(catalog.Models) != 2 {
+		t.Fatalf("catalog = %+v, err = %v", catalog, err)
+	}
+	if first, second := catalog.Models[0], catalog.Models[1]; first.ID != "default" || !first.Default || second.ID != "test-model" {
+		t.Fatalf("unexpected models: %+v", catalog.Models)
+	}
+}
+
 func TestJiuwenSwarmVersion(t *testing.T) {
 	binary, record := fakeHermesForVersionProbe(t, `[ "$*" = "--version" ] && echo "0.2.9b5"`)
 	got, err := DetectVersion(context.Background(), Command{Path: binary}.ForVersionProbe("jiuwenswarm"))
@@ -127,6 +156,7 @@ func TestJiuwenSwarmVersion(t *testing.T) {
 const jiuwenSwarmTestScript = `#!/bin/sh
 [ "$#" -eq 0 ] || exit 2
 emit() { printf '{"jsonrpc":"2.0","id":%s,"result":%s}\n' "$1" "$2"; }
+models='{"sessionId":"swarm-test","models":{"currentModelId":"default","availableModels":[{"modelId":"default","name":"Default"},{"modelId":"test-model","name":"Test"}]}}'
 options='{"configOptions":[{"id":"effort","category":"thought_level","currentValue":"low","options":[{"value":"low"},{"value":"high"}]}]}'
 while IFS= read -r req; do
   printf '%s\n' "$req" >> "$SWARM_REQUESTS"
@@ -136,11 +166,20 @@ while IFS= read -r req; do
       case "$SWARM_MODE" in
         offline) printf 'JiuwenSwarm Gateway unreachable: ws://127.0.0.1:1/ws\n' >&2; exit 1 ;;
         capable) emit "$id" '{"agentCapabilities":{"loadSession":true,"sessionCapabilities":{"resume":{}},"mcpCapabilities":{"http":true}}}' ;;
+        load|expired) emit "$id" '{"agentCapabilities":{"loadSession":true}}' ;;
         *) emit "$id" "$(sed -n '1p' "$SWARM_FIXTURE")" ;;
       esac ;;
-    *'"session/new"'*) emit "$id" '{"sessionId":"swarm-test","configOptions":[]}' ;;
-    *'"session/resume"'*) emit "$id" '{"sessionId":"swarm-test","models":{"currentModelId":"default","availableModels":[{"modelId":"default","name":"Default"},{"modelId":"test-model","name":"Test"}]}}' ;;
-    *'"session/set_model"'*) emit "$id" "$options" ;;
+    *'"session/new"'*)
+      if [ "$SWARM_MODE" = load ]; then emit "$id" "$models"; else emit "$id" '{"sessionId":"swarm-test","configOptions":[]}'; fi ;;
+    *'"session/load"'*)
+      if [ "$SWARM_MODE" = expired ]; then
+        printf '{"jsonrpc":"2.0","id":%s,"error":{"code":-32002,"message":"Session not found or expired"}}\n' "$id"
+      else
+        emit "$id" "$models"
+      fi ;;
+    *'"session/resume"'*) emit "$id" "$models" ;;
+    *'"session/set_model"'*)
+      if [ "$SWARM_MODE" = load ]; then emit "$id" '{}'; else emit "$id" "$options"; fi ;;
     *'"session/set_config_option"'*) emit "$id" "$(printf '%s' "$options" | sed 's/"currentValue":"low"/"currentValue":"high"/')" ;;
     *'"session/prompt"'*)
       if [ "$SWARM_MODE" = poc ]; then sed -n '2,3p' "$SWARM_FIXTURE"; fi
